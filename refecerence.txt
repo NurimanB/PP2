@@ -1,0 +1,78 @@
+capitalize()   Converts the first character to upper case
+casefold()	   Converts string into lower case
+center()	   Returns a centered string
+count()	       Returns the number of times a specified value occurs in a string
+encode()	   Returns an encoded version of the string
+endswith()	   Returns true if the string ends with the specified value
+expandtabs()   Sets the tab size of the string
+find()	       Searches the string for a specified value and returns the position of where it was found
+format()	   Formats specified values in a string
+format_map()   Formats specified values in a string
+index()	       Searches the string for a specified value and returns the position of where it was found
+isalnum()	   Returns True if all characters in the string are alphanumeric
+isalpha()	   Returns True if all characters in the string are in the alphabet
+isascii()	   Returns True if all characters in the string are ascii characters
+isdecimal()	   Returns True if all characters in the string are decimals
+isdigit()	   Returns True if all characters in the string are digits
+isidentifier() Returns True if the string is an identifier
+islower()	   Returns True if all characters in the string are lower case
+isnumeric()	   Returns True if all characters in the string are numeric
+isprintable()  Returns True if all characters in the string are printable
+isspace()	   Returns True if all characters in the string are whitespaces
+istitle()	   Returns True if the string follows the rules of a title
+isupper()	   Returns True if all characters in the string are upper case
+join()	       Joins the elements of an iterable to the end of the string
+ljust()	       Returns a left justified version of the string
+lower()	       Converts a string into lower case
+lstrip()	   Returns a left trim version of the string
+maketrans()	   Returns a translation table to be used in translations
+partition()	   Returns a tuple where the string is parted into three parts
+replace()	   Returns a string where a specified value is replaced with a specified value
+rfind()	       Searches the string for a specified value and returns the last position of where it was found
+rindex()	   Searches the string for a specified value and returns the last position of where it was found
+rjust()	       Returns a right justified version of the string
+rpartition()   Returns a tuple where the string is parted into three parts
+rsplit()	   Splits the string at the specified separator, and returns a list
+rstrip()	   Returns a right trim version of the string
+split()	       Splits the string at the specified separator, and returns a list
+splitlines()   Splits the string at line breaks and returns a list
+startswith()   Returns true if the string starts with the specified value
+strip()	       Returns a trimmed version of the string
+swapcase()	   Swaps cases, lower case becomes upper case and vice versa
+title()	       Converts the first character of each word to upper case
+translate()	   Returns a translated string
+upper()	       Converts a string into upper case
+zfill()	       Fills the string with a specified number of 0 values at the beginning
+
+
+start a working area (see also: git help tutorial)
+   clone     Clone a repository into a new directory
+   init      Create an empty Git repository or reinitialize an existing one
+
+work on the current change (see also: git help everyday)
+   add       Add file contents to the index
+   mv        Move or rename a file, a directory, or a symlink
+   restore   Restore working tree files
+   rm        Remove files from the working tree and from the index
+
+examine the history and state (see also: git help revisions)
+   bisect    Use binary search to find the commit that introduced a bug
+   diff      Show changes between commits, commit and working tree, etc
+   grep      Print lines matching a pattern
+   log       Show commit logs
+   show      Show various types of objects
+   status    Show the working tree status
+
+grow, mark and tweak your common history
+   branch    List, create, or delete branches
+   commit    Record changes to the repository
+   merge     Join two or more development histories together
+   rebase    Reapply commits on top of another base tip
+   reset     Reset current HEAD to the specified state
+   switch    Switch branches
+   tag       Create, list, delete or verify a tag object signed with GPG
+
+collaborate (see also: git help workflows)
+   fetch     Download objects and refs from another repository
+   pull      Fetch from and integrate with another repository or a local branch        
+   push      Update remote refs along with associated objects
