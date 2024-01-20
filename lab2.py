@@ -79,4 +79,43 @@ print(len(fruits))
 
 #PYTHON Tuples
 #exercise 1
+fruits = ("apple", "banana", "cherry")
+print(fruits[0])
 
+#exercise 2
+fruits = ("apple", "banana", "cherry")
+print(len(fruits))
+
+#exercise 3
+fruits = ("apple", "banana", "cherry")
+print(fruits[-1])
+
+#exercise 4
+fruits = ("apple", "banana", "cherry", "orange", "kiwi", "melon", "mango")
+print(fruits[2:5])
+
+#PYTHON Sets
+#exercise 1
+fruits = {"apple", "banana", "cherry"}
+if "apple" in fruits:  
+    print("Yes, apple is a fruit!")
+
+#exercise 2
+fruits = {"apple", "banana", "cherry"}
+fruits.add("orange")
+
+#exercise 3
+fruits = {"apple", "banana", "cherry"}
+more_fruits = ["orange", "mango", "grapes"]
+fruits.update(more_fruits)
+
+#exercise 4
+fruits = {"apple", "banana", "cherry"}
+fruits.remove("banana")
+
+#exercise 5
+fruits = {"apple", "banana", "cherry"}
+fruits.discard("banana")
+
+#PYTHON Dictionaries
+#exercise 1
