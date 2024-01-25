@@ -212,3 +212,10 @@ b = 50
 c = 2
 if a == c or b == c:
     print("YES")
+
+#PYTHON While loops
+#exercise 1
+i = 1
+while i < 6:
+    print(i)
+    i += 1
