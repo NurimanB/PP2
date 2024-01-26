@@ -27,4 +27,4 @@ def my_function(**kid):
 
 #PYTHON Lambda
 #exercise 1
-
+ere
