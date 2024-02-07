@@ -4,7 +4,6 @@ def calculate_factorial(n):
     else:
         return n * calculate_factorial(n - 1)
 
-# Example usage:
 number = int(input("Enter a positive integer: "))
 if number < 0:
     print("Please enter a positive integer.")
