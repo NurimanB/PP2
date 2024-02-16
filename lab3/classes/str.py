@@ -3,16 +3,13 @@ class MyClass():
         self.str = ""
 
     def getString(self):
-        self.str = input("Enter a string: ") #Get a string from console input.
+        self.str = input("Enter a string: ")
 
     def printString(self):
-        print(self.str.upper()) #Print the string in upper case.
-
+        print(self.str.upper()) 
 a = MyClass()
 
-# Call the getString method
 a.getString()
 
-# Call the printString method
 a.printString()
 
