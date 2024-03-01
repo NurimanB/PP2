@@ -1,7 +1,7 @@
 import re
 
 def search_pattern(string):
-    p = r'ab{2,3}' #ищем паттерн где после 'a' идет 2 или 3 'b'
+    p = r'ab{2,3}'
     if re.match(p, string):
         return True
     else:
