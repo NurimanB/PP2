@@ -1,0 +1,20 @@
+A directory is a collection of files and subdirectories. A directory inside a directory is known as a subdirectory.
+Python has the os module that provides us with many useful methods to work with directories (and files as well).
+
+
+We can get the present working directory using the getcwd() method of the os module.
+
+In Python, we can change the current working directory by using the chdir() method.
+The new path that we want to change into must be supplied as a string to this method. And we can use both the forward-slash / or the backward-slash \ to separate the path elements.
+
+All files and sub-directories inside a directory can be retrieved using the listdir() method.
+
+In Python, we can make a new directory using the mkdir() method.
+
+The rename() method can rename a directory or a file.
+For renaming any directory or file, rename() takes in two basic arguments:
+the old name as the first argument
+the new name as the second argument.
+
+In Python, we can use the remove() method or the rmdir() method to remove a file or directory.
+In order to remove a non-empty directory, we can use the rmtree() method inside the shutil module.
