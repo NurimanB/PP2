@@ -1,4 +1,4 @@
-def copy_file(source_file, destination_file):
+def copy(source_file, destination_file):
     try:
         with open(source_file, 'r') as source:
             with open(destination_file, 'w') as destination:
@@ -12,4 +12,4 @@ def copy_file(source_file, destination_file):
 source_file = '4.txt'
 destination_file = '5.txt'
 
-copy_file(source_file, destination_file)
+copy(source_file, destination_file)
