@@ -21,7 +21,7 @@ BALL_SPEED = 20
 
 # создание экрана
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("мячик")
+pygame.display.set_caption("ball")
 
 clock = pygame.time.Clock()
 
