@@ -20,7 +20,7 @@ score_coins = pg.font.SysFont("Verdana", 20)
 class Enemy(pg.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pg.image.load("Enemy.jng") # загружаем картинку
+        self.image = pg.image.load("Enemy.png") # загружаем картинку
         self.rect = self.image.get_rect()
         self.rect.center = (random.randint(40, w - 40), 0) # задаем рандомные координаты
 
