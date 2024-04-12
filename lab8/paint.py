@@ -1,16 +1,16 @@
 import pygame  
 pygame.init()  
 
-fps = 5000  # установка фпс
-timer = pygame.time.Clock()  # создание объекта Clock для управления фпс
-WIDTH, HEIGHT = 800, 600  # размеры экрана
+fps = 5000  
+timer = pygame.time.Clock()  
+WIDTH, HEIGHT = 800, 600  
 active_size = 0  # изначальный размер активного инструмента
 active_color = 'white'  # изначальный цвет активного инструмента
 painting = []  # список для хранения рисунка
 current_tool = 'brush'  # изначально выбранный инструмент - кисть
 
-screen = pygame.display.set_mode([WIDTH, HEIGHT])  # создание окна отображения с заданными размерами
-pygame.display.set_caption("paint")  # название окна
+screen = pygame.display.set_mode([WIDTH, HEIGHT])  
+pygame.display.set_caption("paint")  
 
 # функция для отрисовки меню с выбором цвета и размера кисти
 def draw_menu(color, size):
