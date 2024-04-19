@@ -16,27 +16,35 @@ gameover = pg.transform.scale(gameover, (390, 390))
 
 class Food:
     def __init__(self):
-
-        # задаем рандомные координаты для еды в диапазоне игрового поля 
         self.x = randrange(0, w, step)
         self.y = randrange(0, h, step)
         self.pic = pg.image.load("apple.png")
+        self.pic2 = pg.image.load("banana.jpg")
+        self.is_fruit = False
+
     def draw(self):
-        screen.blit(self.pic, (self.x, self.y))
+        if self.is_fruit:
+            screen.blit(self.pic2, (self.x, self.y))
+        else:
+            screen.blit(self.pic, (self.x, self.y))
+
     def draw2(self):
         self.x = randrange(0, w, step)
         self.y = randrange(0, h, step)
+        self.is_fruit = randint(0, 4) == 0  # 1 in 5 chance of spawning a fruit
+        
 class Snake:
     def __init__(self):
         self.speed = step
-        self.body = [[360, 360]] # изначальные координаты головы
+        self.body = [[360, 360]] 
         self.dx = 0
         self.dy = 0
         self.score = 0
         self.color = 'blue'
+
     def move(self, events):
         for event in events:
-            if event.type == pg.KEYDOWN: # движение змейки по нажатию 
+            if event.type == pg.KEYDOWN: 
                 if event.key == pg.K_LEFT and self.dx == 0: 
                     self.dx = -self.speed
                     self.dy = 0
@@ -63,10 +71,13 @@ class Snake:
             pg.draw.rect(screen, self.color, (part[0], part[1], step, step))
     
     # проверяем когда змейка съедает еду
-    def collideFood(self, f:Food):
-        if self.body[0][0] == f.x and self.body[0][1] == f.y: # если координаты головы змейки совпадают с координатами еды
+    def collideFood(self, f:Food, f2:Food):
+        if self.body[0][0] == f.x and self.body[0][1] == f.y:
             self.score += 1
             self.body.append([1000, 1000]) 
+        elif self.body[0][0] == f2.x and self.body[0][1] == f2.y:
+            self.score += 3
+        self.body.append([1000, 1000]) 
     
     # заканчиваем игру, если голова змейки столкнеться со своим телом
     def selfCollide(self):
@@ -75,9 +86,13 @@ class Snake:
             lose = True # запускаем цикл 'game over' 
 
     # проверяем чтобы еда не оказалась на теле змейки
-    def checkFood(self, f:Food): 
-        if [f.x, f.y] in self.body: # если координаты еды входят в массив координат тела змейки
-            f.draw2() # заново рисуем еду
+    def checkFood(self, f:Food, f2:Food): 
+        if [f.x, f.y] in self.body:
+            f.draw2() 
+        if [f2.x, f2.y] in self.body:
+            f2.draw2()
+            # если координаты еды входят в массив координат тела змейки
+            # заново рисуем еду
 
 class Wall:
     def __init__(self, x, y):
@@ -89,6 +104,7 @@ class Wall:
 # создаем объекты змейки и еды
 s = Snake()
 f = Food()
+f2 = Food()
 
 # запускаем основной цикл
 while isRunning:
@@ -109,11 +125,12 @@ while isRunning:
 
     # вызываем методы классов
     f.draw()
+    f2.draw()
     s.draw()
     s.move(events) # нажать любую клавишу чтобы начать игру
-    s.collideFood(f)
+    s.collideFood(f, f2)
     s.selfCollide()
-    s.checkFood(f)
+    s.checkFood(f, f2)
 
     # баллы 
     counter = score.render(f'Score - {s.score}', True, 'white')
