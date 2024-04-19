@@ -1,247 +1,224 @@
-import pygame
-from math import *
+import pygame  # Import the pygame library for graphics handling
+import math  # Import the math library for mathematical operations
+
+# Initialize pygame
 pygame.init()
 
-fps = 120
-timer = pygame.time.Clock()
-WIDTH, HEIGHT = 800, 600
-active_size = 0
-active_color = 'white'
-painting = []
-current_tool = 'brush'
+# Set frames per second
+fps = 60
 
+# Create a clock object to control the frame rate
+timer = pygame.time.Clock()
+
+# Set the width and height of the screen
+WIDTH = 800
+HEIGHT = 600
+
+# Initialize variables for active figure and color
+active_figure = 0
+active_color = 'white'
+
+# Create the screen with specified dimensions
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
+
+# Set the caption of the window
 pygame.display.set_caption("Paint")
 
+# Initialize the list to store painting data
+painting = []
 
-def draw_menu(color, size):
+
+# Function to draw the menu
+def draw_menu(color):
+    # Draw the background rectangle of the menu
     pygame.draw.rect(screen, 'gray', [0, 0, WIDTH, 70])
-    pygame.draw.line(screen, 'black', (0, 70), (WIDTH, 70))
-    xl_brush = pygame.draw.rect(screen, 'black', [10, 10, 50, 50])
-    pygame.draw.circle(screen, 'white', (35, 35), 20)
-    l_brush = pygame.draw.rect(screen, 'black', [70, 10, 50, 50])
-    pygame.draw.circle(screen, 'white', (95, 35), 15)
-    m_brush = pygame.draw.rect(screen, 'black', [130, 10, 50, 50])
-    pygame.draw.circle(screen, 'white', (155, 35), 10)
-    s_brush = pygame.draw.rect(screen, 'black', [190, 10, 50, 50])
-    pygame.draw.circle(screen, 'white', (215, 35), 5)
-    brush_list = [xl_brush, l_brush, m_brush, s_brush]
 
+    # Draw a horizontal line to separate menu from canvas
+    pygame.draw.line(screen, 'black', (0, 70), (WIDTH, 70), 3)
+
+    # Draw the circle brush icon
+    circle_brush = [pygame.draw.rect(screen, 'black', [10, 10, 50, 50]), 0]
+    pygame.draw.circle(screen, 'white', (35, 35), 20)
+    pygame.draw.circle(screen, 'black', (35, 35), 18)
+
+    # Draw the rectangle brush icon
+    rect_brush = [pygame.draw.rect(screen, 'black', [70, 10, 50, 50]), 1]
+    pygame.draw.rect(screen, 'white', [76.5, 26, 37, 20], 2)
+
+    # Draw the square brush icon
+    square_brush = [pygame.draw.rect(screen, 'black', [130, 10, 50, 50]), 2]
+    pygame.draw.rect(screen, 'white', [135, 15, 40, 40], 2)
+
+    # Draw the right triangle brush icon
+    right_triangle_brush = [pygame.draw.rect(screen, 'black', [190, 10, 50, 50]), 3]
+    pygame.draw.polygon(screen, 'white', [(195, 15), (195, 55), (235, 15)], 2)
+
+    # Draw the equilateral triangle brush icon
+    equilateral_triangle_brush = [pygame.draw.rect(screen, 'black', [250, 10, 50, 50]), 4]
+    side_length = 50  # Side length of the square
+    center_x = 250 + side_length / 2  # x-coordinate of the center of the square
+    center_y = 10 + side_length / 2  # y-coordinate of the center of the square
+    triangle_height = side_length * math.sqrt(3) / 2  # Height of the equilateral triangle
+
+    # Reduce the triangle height slightly to make the triangle fit inside the square
+    triangle_height *= 1
+
+    # Vertices of the equilateral triangle
+    vertex1 = (center_x, center_y - triangle_height / 2)
+    vertex2 = (center_x - side_length / 2 * 0.9, center_y + triangle_height / 2 * 0.9)
+    vertex3 = (center_x + side_length / 2 * 0.9, center_y + triangle_height / 2 * 0.9)
+
+    # Draw the equilateral triangle
+    pygame.draw.polygon(screen, 'white', [vertex1, vertex2, vertex3], 2)
+
+    # Draw the rhombus brush icon
+    rhombus_brush = [pygame.draw.rect(screen, 'black', [310, 10, 50, 50]), 5]
+    top_left = (310, 10)
+    top_right = (360, 10)
+    bottom_left = (310, 60)
+    bottom_right = (360, 60)
+
+    # Adjust the positions of the midpoints to decrease the size of the rhombus
+    mid_top = ((top_left[0] + top_right[0]) // 2, (top_left[1] + top_right[1]) // 2 + 4)
+    mid_left = ((top_left[0] + bottom_left[0]) // 2 + 4, (top_left[1] + bottom_left[1]) // 2)
+    mid_bottom = ((bottom_left[0] + bottom_right[0]) // 2, (bottom_left[1] + bottom_right[1]) // 2 - 4)
+    mid_right = ((top_right[0] + bottom_right[0]) // 2 - 4, (top_right[1] + bottom_right[1]) // 2)
+
+    # Draw the rhombus
+    pygame.draw.polygon(screen, 'white', [mid_top, mid_left, mid_bottom, mid_right], 2)
+
+    # Create a list of brush icons
+    brush_list = [circle_brush, rect_brush, square_brush, right_triangle_brush, equilateral_triangle_brush,
+                  rhombus_brush]
+
+    # Draw the color palette
     pygame.draw.circle(screen, color, (400, 35), 30)
+    pygame.draw.circle(screen, 'dark gray', (400, 35), 30, 3)
+
+    # Load the eraser icon and draw it
+    eraser = pygame.image.load("eraser-square-svgrepo-com.svg")
+    eraser_rect = eraser.get_rect(topleft=(WIDTH - 150, 7))
+    eraser_rect.width = eraser_rect.height = 25
+    screen.blit(eraser, [WIDTH - 150, 7, 25, 25])
+
+    # Draw color rectangles
     blue = pygame.draw.rect(screen, (0, 0, 255), [WIDTH - 35, 10, 25, 25])
     red = pygame.draw.rect(screen, (255, 0, 0), [WIDTH - 35, 35, 25, 25])
     green = pygame.draw.rect(screen, (0, 255, 0), [WIDTH - 60, 10, 25, 25])
     yellow = pygame.draw.rect(screen, (255, 255, 0), [WIDTH - 60, 35, 25, 25])
     teal = pygame.draw.rect(screen, (0, 255, 255), [WIDTH - 85, 10, 25, 25])
     purple = pygame.draw.rect(screen, (255, 0, 255), [WIDTH - 85, 35, 25, 25])
-    white = pygame.draw.rect(screen, (255, 255, 255), [
-                             WIDTH - 110, 10, 25, 25])
-    black = pygame.draw.rect(screen, (0, 0, 0), [WIDTH - 110, 35, 25, 25])
-    circle_button = pygame.draw.rect(screen, 'black', [250, 10, 50, 50])
-    pygame.draw.circle(screen, 'white', (275, 35), 20)
-    rectangle_button = pygame.draw.rect(screen, 'black', [310, 10, 50, 50])
-    pygame.draw.rect(screen, 'white', [315, 15, 40, 40])
-    righttriangle_button = pygame.draw.rect(screen, 'black', [450, 10, 50, 50])
-    pygame.draw.polygon(screen, "white", [(475, 15), (455, 50), (495, 50)])
-    square_button = pygame.draw.rect(screen, 'black', [510, 10, 50, 50])
-    pygame.draw.rect(screen, 'white', [520, 20, 30, 30])
-    equilateral_triangle = pygame.draw.rect(screen, 'black', [570, 10, 50, 50])
-    pygame.draw.polygon(screen, "white", [(595, 15), (580, 50), (610, 50)])
-    rhombus_button = pygame.draw.rect(screen, 'black', [630, 10, 50, 50])
-    pygame.draw.polygon(
-        screen, "white", [(655, 10), (630, 35), (655, 60), (680, 35)])
-    color_rect = [blue, red, green, yellow, teal, purple, white, black, circle_button,
-                  rectangle_button, righttriangle_button, square_button, equilateral_triangle, rhombus_button]
-    rgb_list = [(0, 0, 255), (255, 0, 0), (0, 255, 0), (255, 255, 0), (0, 255, 255), (255, 0, 255),
-                (255, 255, 255), (0, 0, 0), None, None, None, None, None, None]
+    black = pygame.draw.rect(screen, (0, 0, 0), [WIDTH - 110, 10, 25, 25])
+    color_rect = [blue, red, green, yellow, teal, purple, black, eraser_rect]
+    rgb_list = [(0, 0, 255), (255, 0, 0), (0, 255, 0), (255, 255, 0),
+                (0, 255, 255), (255, 0, 255), (0, 0, 0), (255, 255, 255)]
 
     return brush_list, color_rect, rgb_list
 
 
+# Function to draw the painting
 def draw_painting(paints):
-    for i in range(len(paints)):
-        if paints[i][0] == 'circle':
-            pygame.draw.circle(
-                screen, paints[i][1], paints[i][2], paints[i][3])
-        elif paints[i][0] == 'rectangle':
-            pygame.draw.rect(screen, paints[i][1], paints[i][2])
-        elif paints[i][0] == 'righttriangle':
-            pygame.draw.polygon(screen, paints[i][1], paints[i][2])
-        elif paints[i][0] == 'square':
-            pygame.draw.polygon(screen, paints[i][1], paints[i][2])
-        elif paints[i][0] == 'equilateral_triangle':
-            pygame.draw.polygon(screen, paints[i][1], paints[i][2])
-        elif paints[i][0] == 'rhombus':
-            pygame.draw.polygon(screen, paints[i][1], paints[i][2])
+    for color, pos, figure in paints:
+        if color == (255, 255, 255):  # If the color is white
+            pygame.draw.rect(screen, color, [pos[0] - 15, pos[1] - 15, 37, 50])  # Draw a white rectangle
         else:
-            pygame.draw.circle(
-                screen, paints[i][0], paints[i][1], paints[i][2])
+            if figure == 0:  # If the figure is a circle
+                pygame.draw.circle(screen, color, pos, 20, 2)  # Draw a circle
+            elif figure == 1:  # If the figure is a rectangle
+                pygame.draw.rect(screen, color, [pos[0] - 15, pos[1] - 15, 37, 20], 2)  # Draw a rectangle
+            elif figure == 2:  # If the figure is a square
+                pygame.draw.rect(screen, color, [pos[0] - 15, pos[1] - 15, 35, 35], 2)  # Draw a square
+            elif figure == 3:  # If the figure is a right triangle
+                pygame.draw.polygon(screen, color, [(pos[0] - 15, pos[1] - 15),
+                                                    (pos[0] - 15, pos[1] + 35),
+                                                    (pos[0] + 35, pos[1] - 15)], 2)  # Draw a right triangle
+            elif figure == 4:  # If the figure is an equilateral triangle
+                size = 50
+                triangle_height = size * math.sqrt(3) / 2
+                vertex1 = (pos[0], pos[1] - triangle_height / 2)
+                vertex2 = (pos[0] - size / 2, pos[1] + triangle_height / 2)
+                vertex3 = (pos[0] + size / 2, pos[1] + triangle_height / 2)
+                pygame.draw.polygon(screen, color, [vertex1, vertex2, vertex3], 2)  # Draw an equilateral triangle
+            elif figure == 5:  # If the figure is a rhombus
+                pygame.draw.polygon(screen, color, [(pos[0] - 25, pos[1]),
+                                                    (pos[0], pos[1] - 25),
+                                                    (pos[0] + 25, pos[1]),
+                                                    (pos[0], pos[1] + 25)], 2)  # Draw a rhombus
 
 
-running = True
-while running:
+# Main program loop
+run = True
+while run:
+    # Control the frame rate
     timer.tick(fps)
+
+    # Fill the screen with white color
     screen.fill("white")
+
+    # Get the current mouse position
     mouse = pygame.mouse.get_pos()
+
+    # Check if the left mouse button is pressed
     left_click = pygame.mouse.get_pressed()[0]
 
-    if left_click and mouse[1] > 70:  # Не рисуем по меню
-        if current_tool == 'brush':
-            painting.append((active_color, mouse, active_size))
-        elif current_tool == 'circle':
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                drawStarted = True
-                startPos = event.pos
-            if event.type == pygame.MOUSEMOTION:
-                if drawStarted:
-                    pos = event.pos
-                    radius = ((pos[0] - startPos[0])**2 +
-                              (pos[1] - startPos[1])**2)**0.5
-                    pygame.draw.circle(screen, active_color,
-                                       (startPos[0], startPos[1]), radius)
-                    painting.append(
-                        ('circle', active_color, (startPos[0], startPos[1]), radius))
-            if event.type == pygame.MOUSEBUTTONUP:
-                drawStarted = False
-        elif current_tool == 'rectangle':
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                drawStarted = True
-                startPos = event.pos
-            if event.type == pygame.MOUSEMOTION:
-                if drawStarted:
-                    points = []
-                    pos = event.pos
-                    width = abs(pos[0] - startPos[0])
-                    height = abs(pos[1] - startPos[1])
-                    X1 = min(pos[0], startPos[0])
-                    Y1 = min(pos[1], startPos[1])
-                    points.append((X1))
-                    points.append((Y1))
-                    points.append((width))
-                    points.append((height))
-                    pygame.draw.rect(screen, active_color, points)
-                    painting.append(('rectangle', active_color, points))
+    # Draw the menu and get brush list, color rectangles, and RGB values
+    brushes, colors, rgbs = draw_menu(active_color)
 
-            if event.type == pygame.MOUSEBUTTONUP:
-                drawStarted = False
-                current_tool = 'brush'
+    # If left mouse button is pressed and the mouse is below the menu
+    if left_click and mouse[1] > 85:
+        # Append the painting data (color, position, figure) to the painting list
+        painting.append((active_color, mouse, active_figure))
 
-        elif current_tool == 'righttriangle':
-            points = []
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                drawStarted = True
-                startPos = event.pos
-            if event.type == pygame.MOUSEMOTION:
-                if drawStarted:
-                    pos = event.pos
-                    a = abs(((pos[0] - startPos[0])**2 +
-                            (pos[1] - startPos[1])**2)**0.5)
-                    points.append((pos[0], pos[1]))
-                    points.append((abs(startPos[0] + sqrt(3)*a), startPos[1]))
-                    points.append(
-                        (abs(startPos[0]-sqrt(3)*a/2), abs(startPos[1] - a/2)))
-                    pygame.draw.polygon(screen, active_color, points)
-                    painting.append(('righttriangle', active_color, points))
-            if event.type == pygame.MOUSEBUTTONUP:
-                drawStarted = False
-                current_tool = 'brush'
-        elif current_tool == 'square':
-            points = []
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                drawStarted = True
-                startPos = event.pos
-            if event.type == pygame.MOUSEMOTION:
-                if drawStarted:
-                    pos = event.pos
-                    a = abs(((pos[0] - startPos[0])**2 +
-                            (pos[1] - startPos[1])**2)**0.5)
-                    points.append(((startPos[0]), (startPos[1])))  # x1
-                    points.append(((startPos[0]), (startPos[1] - a)))  # x3
-                    points.append(((startPos[0] + a), (startPos[1] - a)))  # x4
-                    points.append(((startPos[0] + a), startPos[1]))  # x2
-                    pygame.draw.polygon(screen, active_color, points)
-                    painting.append(('square', active_color, points))
-            if event.type == pygame.MOUSEBUTTONUP:
-                drawStarted = False
-                current_tool = "brush"
-        elif current_tool == 'equilateral_triangle':
-            points = []
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                drawStarted = True
-                startPos = event.pos
-            if event.type == pygame.MOUSEMOTION:
-                if drawStarted:
-                    pos = event.pos
-                    a = abs(((pos[0] - startPos[0])**2 +
-                            (pos[1] - startPos[1])**2)**0.5)
-                    points.append(((startPos[0]), startPos[1]))  # x1
-                    points.append(
-                        ((pos[0] - (pos[0] - startPos[0])), (pos[1] - a)))  # x2
-                    points.append(
-                        ((pos[0] + (pos[0] - startPos[0])), (pos[1] - a)))  # x3
-                    pygame.draw.polygon(screen, active_color, points)
-                    painting.append(
-                        ('equilateral_triangle', active_color, points))
-            if event.type == pygame.MOUSEBUTTONUP:
-                drawStarted = False
-                current_tool = "brush"
-        elif current_tool == 'rhombus':
-            points = []
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                drawStarted = True
-                start_vertex = event.pos  # Начальная вершина
-            if event.type == pygame.MOUSEMOTION:
-                if drawStarted:
-                    opposite_vertex = event.pos  # Противоположная вершина
-                    # Находим координаты середины диагонали
-                    diagonal_midpoint = (
-                        (start_vertex[0] + opposite_vertex[0]) / 2, (start_vertex[1] + opposite_vertex[1]) / 2)
-                    # Находим координаты одной из сторон ромба, находящейся на том же расстоянии от середины диагонали
-                    side_vertex = (diagonal_midpoint[0] + (opposite_vertex[1] - start_vertex[1]),
-                                   diagonal_midpoint[1] - (opposite_vertex[0] - start_vertex[0]))
-                    # Находим координаты второй стороны ромба
-                    side_vertex_2 = (diagonal_midpoint[0] - (opposite_vertex[1] - start_vertex[1]),
-                                     diagonal_midpoint[1] + (opposite_vertex[0] - start_vertex[0]))
-                    # Отрисовываем ромб на экране
-                    pygame.draw.polygon(screen, active_color, [
-                                        start_vertex, opposite_vertex, side_vertex, side_vertex_2])
-                    # Добавляем ромб в список рисунков
-                    painting.append(('rhombus', active_color, [
-                                    start_vertex, side_vertex, opposite_vertex, side_vertex_2]))
-            if event.type == pygame.MOUSEBUTTONUP:
-                drawStarted = False
-                current_tool = "brush"
+    # Draw the painting
     draw_painting(painting)
-    if mouse[1] > 70 and current_tool == 'brush':
-        pygame.draw.circle(screen, active_color, mouse, active_size)
-    brushes, colors, rgbs = draw_menu(active_color, active_size)
 
+    # If the mouse is below the menu
+    if mouse[1] > 85:
+        # If the active color is white
+        if active_color == (255, 255, 255):
+            # Draw a white rectangle at the mouse position
+            pygame.draw.rect(screen, active_color, [mouse[0] - 15, mouse[1] - 15, 37, 50])
+        else:
+            # Depending on the active figure, draw the corresponding shape at the mouse position
+            if active_figure == 0:  # Circle
+                pygame.draw.circle(screen, active_color, mouse, 20, 2)
+            elif active_figure == 1:  # Rectangle
+                pygame.draw.rect(screen, active_color, [mouse[0] - 15, mouse[1] - 15, 37, 20], 2)
+            elif active_figure == 2:  # Square
+                pygame.draw.rect(screen, active_color, [mouse[0] - 15, mouse[1] - 15, 35, 35], 2)
+            elif active_figure == 3:  # Right triangle
+                pygame.draw.polygon(screen, active_color, [(mouse[0] - 15, mouse[1] - 15),
+                                                           (mouse[0] - 15, mouse[1] + 35),
+                                                           (mouse[0] + 35, mouse[1] - 15)], 2)
+            elif active_figure == 4:  # Equilateral triangle
+                size = 50
+                triangle_height = size * math.sqrt(3) / 2
+                vertex1 = (mouse[0], mouse[1] - triangle_height / 2)
+                vertex2 = (mouse[0] - size / 2, mouse[1] + triangle_height / 2)
+                vertex3 = (mouse[0] + size / 2, mouse[1] + triangle_height / 2)
+                pygame.draw.polygon(screen, active_color, [vertex1, vertex2, vertex3], 2)
+            elif active_figure == 5:  # Rhombus
+                pygame.draw.polygon(screen, active_color, [(mouse[0] - 25, mouse[1]),
+                                                           (mouse[0], mouse[1] - 25),
+                                                           (mouse[0] + 25, mouse[1]),
+                                                           (mouse[0], mouse[1] + 25)], 2)
+
+    # Event handling loop
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+        if event.type == pygame.QUIT:  # If the user clicks the close button
+            run = False  # Set run to False to exit the loop
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            for i in range(len(brushes)):
-                if brushes[i].collidepoint(event.pos):
-                    active_size = 20 - (i * 5)
+        if event.type == pygame.MOUSEBUTTONDOWN:  # If the user presses a mouse button
+            for i in range(len(colors)):  # Iterate over the color rectangles
+                if colors[i].collidepoint(event.pos):  # If the mouse click is within the color rectangle
+                    active_color = rgbs[i]  # Set the active color to the corresponding RGB value
 
-            for i in range(len(colors)):
-                if colors[i].collidepoint(event.pos):
-                    if rgbs[i] is not None:
-                        active_color = rgbs[i]
-                    else:
-                        if i == len(colors) - 6:
-                            current_tool = 'circle'
-                        elif i == len(colors) - 5:
-                            current_tool = 'rectangle'
-                        elif i == len(colors) - 4:
-                            current_tool = 'righttriangle'
-                        elif i == len(colors) - 3:
-                            current_tool = 'square'
-                        elif i == len(colors) - 2:
-                            current_tool = 'equilateral_triangle'
-                        elif i == len(colors) - 1:
-                            current_tool = 'rhombus'
-    pygame.display.flip()
+            for i in brushes:  # Iterate over the brush icons
+                if i[0].collidepoint(event.pos):  # If the mouse click is within the brush icon
+                    active_figure = i[1]  # Set the active figure to the corresponding brush type
 
+        # Update the display
+        pygame.display.flip()
+
+# Quit pygame
 pygame.quit()
