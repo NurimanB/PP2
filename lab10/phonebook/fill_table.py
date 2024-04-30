@@ -10,34 +10,38 @@ conn = psycopg2.connect(
 con = conn.cursor()
 arr=[]
 
-
-'''# CSV to TABLE
+'''
+# CSV to TABLE
 with open('names.csv') as f:
     f_read = csv.reader(f, delimiter=',')
 
     for row in f_read:
         row[0] = int(row[0].strip(','))
-        arr.append(row)'''
+        arr.append(row)
 
 
+postgres_insert_query = """ INSERT INTO  phone_number VALUES (%s,%s,%s,%s) RETURNING *;"""
 
-
-#insert entering user name, phone from console
-phone_number_id = str(input("id: "))
-surname = str(input("surname: "))
-name = str(input("name: "))
-number_value = int(input("number:"))
-#(phone_number_id, name, surname, number_value)
-
-#postgres_insert_query = """ INSERT INTO  phone_number VALUES (%s,%s,%s,%s) RETURNING *;"""
-postgres_insert_query = """ INSERT INTO  phone_number(phone_number_id, name, surname, number_value) VALUES (%s,%s,%s,%s)"""
-record_to_insert = (phone_number_id, name, surname, number_value)
-'''for i in arr:
-    con.execute(postgres_insert_query, i)
-'''
 for i in arr:
-    con.execute(postgres_insert_query, record_to_insert)
+    con.execute(postgres_insert_query, i)
 
 conn.commit()
 print("successfully !!")
+conn.close()
+'''
+
+
+#insert entering user name, phone from console
+first = str(input("Name: "))
+last = str(input("Surname: "))
+num = int(input("Number: "))
+
+
+postgres_insert_query = """ INSERT INTO  phone_number(name, surname, number_value) VALUES (%s,%s,%s)"""
+record_to_insert = (first, last, num)
+con.execute(postgres_insert_query, record_to_insert)
+
+
+conn.commit()
+print("successfully !!");
 conn.close()

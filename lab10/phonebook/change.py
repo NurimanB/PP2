@@ -1,30 +1,31 @@
-import psycopg2
-import csv
+#Implement updating data in the table (change user first name or phone)
 
+import psycopg2
 
 conn = psycopg2.connect(
-    host='localhost',
-    database='Phonebook',
-    user='postgres',
-    password='qwerty')
-
-con = conn.cursor()
+	database="Phonebook",
+	user='postgres',
+	password='qwerty',
+	host='localhost',
+	#port= '5432'
+)
+cursor = conn.cursor()
 conn.autocommit = True
 
-pre_name = str(input("Previous name: "))
-pre_surname = str(input("Previous surname: "))
-pre_phone = str(input("Previous phone number: "))
-
-smt = f"select * from Phonebook where name =\'{pre_name}\' and surname = \'{pre_surname}\' and phone_value = \'{pre_phone}\' "
-con.execute(smt)
-info = con.fetchall()
+#looking with the first and last name
+first_old = str(input("First_old: "))
+last_old = str(input("Last_old: "))
+num_old = int(input("Num_old: "))
+sql = f"select * from phone_number where name =\'{first_old}\' and surname = \'{last_old}\' and number_value = \'{num_old}\' "
+cursor.execute(sql)
+info = cursor.fetchall()
 
 if len(info) > 0:
-    new_name = str(input("new_name: "))
-    new_surname = str(input("new_surname: "))
-    new_phone = int(input("new_number: "))
-    sql_update = f"Update Phonebook set phone_num =\'{new_phone}\', first_name =\'{new_name}\', last_name =\'{new_surname}\' where first_name =\'{pre_name}\' and last_name = \'{pre_surname}\'; " 
-    con.execute(sql_update)
+    new_first = str(input("First_new: "))
+    new_last = str(input("Last_new: "))
+    new_phone = int(input("Num_new: "))
+    sql_update = f"Update phone_number set number_value =\'{new_phone}\', name =\'{new_first}\', surname =\'{new_last}\' where name =\'{first_old}\' and surname = \'{last_old}\'; " 
+    cursor.execute(sql_update)
     print("successfully !!");
 else:
     print("this people name is not in phonebook")
