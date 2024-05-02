@@ -30,5 +30,5 @@ def delete_data_by_pattern(pattern):
             con.close()
             connection.close()
 
-pat = input('Who do you want to delete?')
+pat = input('Who do you want to delete? ')
 delete_data_by_pattern(pat)
