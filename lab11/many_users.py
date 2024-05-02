@@ -10,7 +10,7 @@ def create_insert_many_users():
         )
         con = connection.cursor()
 
-        con.execute("""
+        con.execute(r"""
             CREATE OR REPLACE FUNCTION many_users(names TEXT[], surnames TEXT[], phones TEXT[]) RETURNS TEXT[] AS $$
             DECLARE
                 incorrect_data TEXT[];
