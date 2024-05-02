@@ -1,6 +1,6 @@
 import psycopg2 as pgsql
 
-def create_insert_many_users():
+def insert_many_users():
     try:
         connection = pgsql.connect(
             database="Phonebook",
@@ -68,7 +68,7 @@ def many_users(names, surnames, phones):
             con.close()
             connection.close()
 
-create_insert_many_users()
+insert_many_users()
 names = ['Anvar', 'Abylay']
 surnames = ['Zhakupov', 'Akhmetov']
 phones = ['7772394389','7890123456']
