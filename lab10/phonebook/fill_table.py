@@ -20,7 +20,7 @@ with open('names.csv') as f:
         arr.append(row)
 
 
-postgres_insert_query = """ INSERT INTO  phone_number VALUES (%s,%s,%s,%s) RETURNING *;"""
+postgres_insert_query = """ INSERT INTO  phone_number VALUES (%s,%s,%s) RETURNING *;"""
 
 for i in arr:
     con.execute(postgres_insert_query, i)
