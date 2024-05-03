@@ -5,7 +5,6 @@ def create_tables():
     """ Create tables in the PostgreSQL database"""
     commands = """
         CREATE TABLE phone_number (
-            phone_number_id SERIAL PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             surname VARCHAR(255) NOT NULL,
             number_value VARCHAR(255) NOT NULL
