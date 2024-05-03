@@ -1,4 +1,3 @@
-#Implement deleting data from tables by username of phone
 import psycopg2
 
 conn = psycopg2.connect(
