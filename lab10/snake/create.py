@@ -8,7 +8,7 @@ conn = psycopg2.connect(
 )
 
 conn.autocommit = True
-cursor = conn.cursor()
+con = conn.cursor()
 
 sql = '''CREATE TABLE Snakedata(
    user_login VARCHAR(255) NOT NULL,
@@ -23,6 +23,6 @@ sql = '''CREATE TABLE Snakedata(
 );'''
 
 
-cursor.execute(sql)
+con.execute(sql)
 print("Database has been created successfully !!");
 conn.close()
