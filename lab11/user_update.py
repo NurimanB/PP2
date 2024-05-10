@@ -1,6 +1,6 @@
 import psycopg2 as pgsql
 
-def insert_or_update():
+def update():
     try:
         connection = pgsql.connect(
             database="Phonebook",
@@ -11,7 +11,7 @@ def insert_or_update():
         con = connection.cursor()
 
         con.execute("""
-            CREATE OR REPLACE FUNCTION insert_or_update_user(name_param TEXT, surname_param TEXT, phone_param TEXT) 
+            CREATE OR REPLACE FUNCTION update_user(name_param TEXT, surname_param TEXT, phone_param TEXT) 
             RETURNS VOID AS 
             $$
             BEGIN
@@ -34,7 +34,7 @@ def insert_or_update():
             con.close()
             connection.close()
 
-def insert_or_update_user(name, surname, phone):
+def update_user(name, surname, phone):
     try:
         connection = pgsql.connect(
             database="Phonebook",
@@ -43,7 +43,7 @@ def insert_or_update_user(name, surname, phone):
             host='localhost',
         )
         con = connection.cursor()
-        con.callproc('insert_or_update_user', (name, surname, phone))
+        con.callproc('update_user', (name, surname, phone))
         
         connection.commit()
 
@@ -54,5 +54,7 @@ def insert_or_update_user(name, surname, phone):
             con.close()
             connection.close()
 
-insert_or_update()
-insert_or_update_user('Nuriman', 'Baltabayev', '1234567890')
+update()
+update_user('Nuriman', 'Baltabayev', '12345678901')
+update_user('Almas', 'Saduakas', '534742354512')
+

@@ -16,7 +16,7 @@ with open('names.csv') as f:
     f_read = csv.reader(f, delimiter=',')
 
     for row in f_read:
-        row[0] = int(row[0].strip(','))
+        row[0] = str(row[0].strip(','))
         arr.append(row)
 
 
